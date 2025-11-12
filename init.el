@@ -11,6 +11,8 @@
 (setq make-backup-files nil)
 (setq scroll-margin 15)
 
+(set-frame-font "Iosevka 13")
+
 (setq read-process-output-max (* 1024 1024))
 
 (add-hook 'emacs-startup-hook #'config/reset-gc-settings)
@@ -19,10 +21,14 @@
   "Restore GC settings from 200 MB to 50 MB."
   (setq gc-cons-tthreshold (* 1024 1024 50)))
 
-(use-package color-theme-sanityinc-tomorrow
+(use-package which-key
+  :config
+  (which-key-mode))
+
+(use-package nord-theme
   :ensure t
   :config
-  (load-theme 'sanityinc-tomorrow-night))
+  (load-theme 'nord))
 
 (use-package dashboard
   :ensure t
@@ -35,9 +41,6 @@
   :ensure t)
 
 (use-package all-the-icons
-  :ensure t)
-
-(use-package nerd-icons
   :ensure t)
 
 (use-package projectile
@@ -54,14 +57,19 @@
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t))
 
+(use-package ripgrep
+  :ensure t)
+
 (use-package tree-sitter-langs
   :ensure t)
 
+(use-package treesit-auto
+  :ensure t
+  :config
+  (global-treesit-auto-mode))
+
 (use-package flymake
   :hook (after-init . global-flymake-mode))
-
-(use-package eglot
-  :hook (prog-mode . eglot-ensure))
 
 (use-package magit
   :ensure t
@@ -73,4 +81,70 @@
   (mood-line-mode))
 
 (use-package go-mode
-  :ensure t)
+  :ensure t
+  :hook ((go-mode . eglot-ensure)
+	 (before-save . (lambda ()
+			  (add-hook 'before-save-hook #'gofmt-before-save nil t))))
+  :config
+  (setq eglot-workspace-configuration
+	'((:gopls . ((staticcheck . t)
+		     (usePlaceholders . t)
+		     (completeUnimported . t))))))
+
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode))
+
+;; Enable Vertico for completion UI
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
+
+;; Add Consult for enhanced commands (search, buffer switching, etc.)
+(use-package consult
+  :ensure t
+  :bind (("C-s" . consult-line)            ;; search in buffer
+         ("C-x b" . consult-buffer)        ;; switch buffer
+         ("M-y" . consult-yank-pop)        ;; show kill-ring
+         ("C-c r" . consult-ripgrep)       ;; project search
+         ("C-c f" . consult-find)))        ;; find files
+
+(use-package consult-dir
+  :ensure t
+  :bind ("C-x d" . consult-dir))
+
+;; Embark adds context-sensitive actions
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)         ;; act on thing at point
+         ("C-;" . embark-dwim))       ;; smart default action
+  :init
+  ;; Show Embark actions in a helpful completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+;; Embark-Consult integration: previews in Consult buffers
+(use-package embark-consult
+  :ensure t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package emacs
+  :custom
+  (tab-always-indent 'complete)
+  (text-mode-ispell-word-completion nil)
+  (read-extended-command-predicate #'command-completion-default-include-p))
+
+(add-hook 'eshell-mode-hook
+	  (lambda ()
+	    (display-line-numbers-mode -1)))
+
+(global-set-key (kbd "C-c t") 'eshell)
+(global-set-key (kbd "C-x p") 'my/move-back-window)
+(global-set-key (kbd "C-x 2") 'split-window-right)
+(global-set-key (kbd "C-x 3") 'split-window-below)
+
+(defun my/move-back-window ()
+  (interactive)
+  (other-window -1))
