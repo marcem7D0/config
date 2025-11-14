@@ -1,4 +1,4 @@
-;; Marcell Mittnacht (Github: marcem7D0) Emacs config
+;;; Marcell Mittnacht (Github: marcem7D0) Emacs config
 
 (setq inhibit-startup-screen t)
 (menu-bar-mode -1)
@@ -60,36 +60,44 @@
 (use-package ripgrep
   :ensure t)
 
-(use-package tree-sitter-langs
-  :ensure t)
-
-(use-package treesit-auto
-  :ensure t
-  :config
-  (global-treesit-auto-mode))
-
 (use-package flymake
   :hook (after-init . global-flymake-mode))
 
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)))
+  :bind (("C-x g" . magit-status))
+  :config
+  (setq magit-display-buffer-function #'magit-display-buffer-traditional))
 
 (use-package mood-line
   :ensure t
   :config
   (mood-line-mode))
 
+(use-package eglot
+  :bind
+  ("C-x r" . eglot-rename)
+  :config
+  (setq eglot-autoshutdown t)
+  (setq eglot-sync-connect nil))
+
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode))
+
 (use-package go-mode
   :ensure t
-  :hook ((go-mode . eglot-ensure)
-	 (before-save . (lambda ()
-			  (add-hook 'before-save-hook #'gofmt-before-save nil t))))
+  :hook (go-mode . eglot-ensure)
   :config
+  (setq gofmt-command "goimports")
   (setq eglot-workspace-configuration
-	'((:gopls . ((staticcheck . t)
-		     (usePlaceholders . t)
-		     (completeUnimported . t))))))
+        '((:gopls . ((staticcheck . t)
+                     (usePlaceholders . t)
+                     (completeUnimported . t)))))
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'gofmt-before-save nil t))))
 
 (use-package corfu
   :ensure t
