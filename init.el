@@ -5,6 +5,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (global-display-line-numbers-mode t)
+(setq-default truncate-lines t)
 (setq display-line-numbers-type 'relative)
 (setq visible-bell nil)
 (setq ring-bell-function #'ignore)
@@ -25,10 +26,11 @@
   :config
   (which-key-mode))
 
-(use-package nord-theme
+(use-package spacemacs-theme
   :ensure t
-  :config
-  (load-theme 'nord))
+  :defer t
+  :init
+  (load-theme 'spacemacs-dark))
 
 (use-package dashboard
   :ensure t
@@ -36,6 +38,11 @@
   (dashboard-setup-startup-hook)
   (setq dashbaord-center-content t)
   (setq dashboard-vertically-center-content t))
+
+(use-package move-text
+  :ensure t
+  :bind (("M-<up>" . move-text-up)
+	 ("M-<down>" . move-text-down)))
 
 (use-package page-break-lines
   :ensure t)
@@ -76,7 +83,8 @@
 
 (use-package eglot
   :bind
-  ("C-x r" . eglot-rename)
+  (("C-x r" . eglot-rename)
+   ("C-x a" . eglot-code-actions))
   :config
   (setq eglot-autoshutdown t)
   (setq eglot-sync-connect nil))
@@ -113,8 +121,7 @@
 ;; Add Consult for enhanced commands (search, buffer switching, etc.)
 (use-package consult
   :ensure t
-  :bind (("C-s" . consult-line)            ;; search in buffer
-         ("C-x b" . consult-buffer)        ;; switch buffer
+  :bind (("C-x b" . consult-buffer)        ;; switch buffer
          ("M-y" . consult-yank-pop)        ;; show kill-ring
          ("C-c r" . consult-ripgrep)       ;; project search
          ("C-c f" . consult-find)))        ;; find files
@@ -138,6 +145,9 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package copilot-chat
+  :ensure t)
+
 (use-package emacs
   :custom
   (tab-always-indent 'complete)
@@ -152,6 +162,7 @@
 (global-set-key (kbd "C-x p") 'my/move-back-window)
 (global-set-key (kbd "C-x 2") 'split-window-right)
 (global-set-key (kbd "C-x 3") 'split-window-below)
+(global-set-key (kbd "C-c C-t") 'copilot-chat-display)
 
 (defun my/move-back-window ()
   (interactive)
