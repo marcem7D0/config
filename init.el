@@ -26,11 +26,14 @@
   :config
   (which-key-mode))
 
-(use-package spacemacs-theme
+(use-package doom-themes
   :ensure t
-  :defer t
-  :init
-  (load-theme 'spacemacs-dark))
+  :custom
+  ;; Global settings (defaults)
+  (doom-themes-enable-bold t)   ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  :config
+  (load-theme 'doom-one t))
 
 (use-package dashboard
   :ensure t
@@ -66,9 +69,6 @@
 
 (use-package ripgrep
   :ensure t)
-
-(use-package flymake
-  :hook (after-init . global-flymake-mode))
 
 (use-package magit
   :ensure t
