@@ -12,7 +12,7 @@
 (setq make-backup-files nil)
 (setq scroll-margin 15)
 
-(set-frame-font "Iosevka 13")
+(set-frame-font "Iosevka Nerd Font 13")
 
 (setq read-process-output-max (* 1024 1024))
 
@@ -26,14 +26,20 @@
   :config
   (which-key-mode))
 
-(use-package doom-themes
+(use-package exec-path-from-shell
   :ensure t
-  :custom
-  ;; Global settings (defaults)
-  (doom-themes-enable-bold t)   ; if nil, bold is universally disabled
-  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
   :config
-  (load-theme 'doom-one t))
+  (exec-path-from-shell-initialize))
+
+(use-package modus-themes
+  :ensure t
+  :config
+  (setq modus-themes-mixed-fonts t
+	modus-themes-italic-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-completions '((t . (bold)))
+        modus-themes-prompts '(bold))
+  (load-theme 'modus-operandi-tinted))
 
 (use-package dashboard
   :ensure t
@@ -63,6 +69,8 @@
   :init
   (when (eq system-type 'windows-nt)
     (setq projectile-project-search-path '("D:/Projects")))
+  (when (eq system-type 'darwin)
+    (setq projectile-project-search-path '("~/Documents/Git")))
   (setq dashboard-icon-type 'all-the-icons)
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t))
@@ -87,7 +95,9 @@
    ("C-x a" . eglot-code-actions))
   :config
   (setq eglot-autoshutdown t)
-  (setq eglot-sync-connect nil))
+  (setq eglot-sync-connect nil)
+  (add-to-list 'eglot-server-programs
+               '(go-mode . ("gopls"))))
 
 (use-package flycheck
   :ensure t
@@ -99,13 +109,16 @@
   :hook (go-mode . eglot-ensure)
   :config
   (setq gofmt-command "goimports")
-  (setq eglot-workspace-configuration
-        '((:gopls . ((staticcheck . t)
-                     (usePlaceholders . t)
-                     (completeUnimported . t)))))
   (add-hook 'go-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'gofmt-before-save nil t))))
+
+(use-package flycheck-golangci-lint
+  :ensure t
+  :hook (go-mode . flycheck-golangci-lint-setup)
+  :config
+  (setq flycheck-golangci-lint-fast t)
+  (setq flycheck-golangci-lint-enable-linters '("staticcheck" "unused" "govet" "errcheck" "ineffassign" "goconst")))
 
 (use-package corfu
   :ensure t
@@ -147,6 +160,10 @@
 
 (use-package copilot-chat
   :ensure t)
+
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
 
 (use-package emacs
   :custom
