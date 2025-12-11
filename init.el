@@ -1,4 +1,5 @@
-;;; Marcell Mittnacht (Github: marcem7D0) Emacs config
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
 
 (setq inhibit-startup-screen t)
 (menu-bar-mode -1)
@@ -12,34 +13,23 @@
 (setq make-backup-files nil)
 (setq scroll-margin 15)
 
-(set-frame-font "Iosevka Nerd Font 13")
+(set-frame-font "Iosevka 13" nil t)
 
 (setq read-process-output-max (* 1024 1024))
 
-(add-hook 'emacs-startup-hook #'config/reset-gc-settings)
+(require 'package)
 
-(defun config/reset-gc-settings ()
-  "Restore GC settings from 200 MB to 50 MB."
-  (setq gc-cons-tthreshold (* 1024 1024 50)))
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
 
 (use-package which-key
   :config
   (which-key-mode))
 
-(use-package exec-path-from-shell
+(use-package dracula-theme
   :ensure t
   :config
-  (exec-path-from-shell-initialize))
-
-(use-package modus-themes
-  :ensure t
-  :config
-  (setq modus-themes-mixed-fonts t
-	modus-themes-italic-constructs t
-        modus-themes-bold-constructs t
-        modus-themes-completions '((t . (bold)))
-        modus-themes-prompts '(bold))
-  (load-theme 'modus-operandi-tinted))
+  (load-theme 'dracula))
 
 (use-package dashboard
   :ensure t
@@ -67,10 +57,6 @@
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
-  (when (eq system-type 'windows-nt)
-    (setq projectile-project-search-path '("D:/Projects")))
-  (when (eq system-type 'darwin)
-    (setq projectile-project-search-path '("~/Documents/Git")))
   (setq dashboard-icon-type 'all-the-icons)
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t))
@@ -89,74 +75,13 @@
   :config
   (mood-line-mode))
 
-(use-package eglot
-  :bind
-  (("C-x r" . eglot-rename)
-   ("C-x a" . eglot-code-actions))
-  :config
-  (setq eglot-autoshutdown t)
-  (setq eglot-sync-connect nil)
-  (add-to-list 'eglot-server-programs
-               '(go-mode . ("gopls"))))
-
-(use-package flycheck
-  :ensure t
-  :config
-  (global-flycheck-mode))
-
 (use-package go-mode
   :ensure t
-  :hook (go-mode . eglot-ensure)
   :config
   (setq gofmt-command "goimports")
   (add-hook 'go-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'gofmt-before-save nil t))))
-
-(use-package flycheck-golangci-lint
-  :ensure t
-  :hook (go-mode . flycheck-golangci-lint-setup)
-  :config
-  (setq flycheck-golangci-lint-fast t)
-  (setq flycheck-golangci-lint-enable-linters '("staticcheck" "unused" "govet" "errcheck" "ineffassign" "goconst")))
-
-(use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode))
-
-;; Enable Vertico for completion UI
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode))
-
-;; Add Consult for enhanced commands (search, buffer switching, etc.)
-(use-package consult
-  :ensure t
-  :bind (("C-x b" . consult-buffer)        ;; switch buffer
-         ("M-y" . consult-yank-pop)        ;; show kill-ring
-         ("C-c r" . consult-ripgrep)       ;; project search
-         ("C-c f" . consult-find)))        ;; find files
-
-(use-package consult-dir
-  :ensure t
-  :bind ("C-x d" . consult-dir))
-
-;; Embark adds context-sensitive actions
-(use-package embark
-  :ensure t
-  :bind (("C-." . embark-act)         ;; act on thing at point
-         ("C-;" . embark-dwim))       ;; smart default action
-  :init
-  ;; Show Embark actions in a helpful completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command))
-
-;; Embark-Consult integration: previews in Consult buffers
-(use-package embark-consult
-  :ensure t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package copilot-chat
   :ensure t)
@@ -165,11 +90,9 @@
   :ensure t
   :bind ("C-c d" . docker))
 
-(use-package emacs
-  :custom
-  (tab-always-indent 'complete)
-  (text-mode-ispell-word-completion nil)
-  (read-extended-command-predicate #'command-completion-default-include-p))
+(use-package dumb-jump
+  :ensure t
+  :hook (xref-backend-funtions . dumb-jump-xref-activate)) 
 
 (add-hook 'eshell-mode-hook
 	  (lambda ()
