@@ -1,6 +1,11 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq auto-save-list-file-prefix nil)
+(setq create-lockfiles nil)
+
 (setq inhibit-startup-screen t)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -26,10 +31,10 @@
   :config
   (which-key-mode))
 
-(use-package dracula-theme
+(use-package naysayer-theme
   :ensure t
   :config
-  (load-theme 'dracula))
+  (load-theme 'naysayer))
 
 (use-package dashboard
   :ensure t
@@ -84,7 +89,14 @@
               (add-hook 'before-save-hook #'gofmt-before-save nil t))))
 
 (use-package copilot-chat
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'display-buffer-alist
+             '("\\*copilot-chat\\*"
+               (display-buffer-in-side-window)
+               (side . right)
+               (slot . 0)
+               (window-width . 0.4))))
 
 (use-package docker
   :ensure t
@@ -102,7 +114,7 @@
 (global-set-key (kbd "C-x p") 'my/move-back-window)
 (global-set-key (kbd "C-x 2") 'split-window-right)
 (global-set-key (kbd "C-x 3") 'split-window-below)
-(global-set-key (kbd "C-c C-t") 'copilot-chat-display)
+(global-set-key (kbd "C-c C-c") 'copilot-chat-display)
 
 (defun my/move-back-window ()
   (interactive)
