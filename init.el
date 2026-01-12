@@ -90,71 +90,9 @@
 	 (go-mode . (lambda()
 		      (add-hook 'before-save-hook #'gofmt-before-save nil t)))))
 
-(use-package copilot-chat
-  :ensure t
-  :config
-  (add-to-list 'display-buffer-alist
-             '("\\*copilot-chat\\*"
-               (display-buffer-in-side-window)
-               (side . right)
-               (slot . 0)
-               (window-width . 0.4))))
-
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
-
-(use-package eglot
-  :bind
-  (("C-x r" . eglot-rename)
-   ("C-x a" . eglot-code-actions))
-  :config
-  (setq eglot-autoshutdown t)
-  (setq eglot-sync-connect nil))
-
-(use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode))
-
-;; Enable Vertico for completion UI
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode))
-
-;; Add Consult for enhanced commands (search, buffer switching, etc.)
-(use-package consult
-  :ensure t
-  :bind (("C-x b" . consult-buffer)        ;; switch buffer
-         ("M-y" . consult-yank-pop)        ;; show kill-ring
-         ("C-c r" . consult-ripgrep)       ;; project search
-         ("C-c f" . consult-find)))        ;; find files
-
-(use-package consult-dir
-  :ensure t
-  :bind ("C-x d" . consult-dir))
-
-;; Embark adds context-sensitive actions
-(use-package embark
-  :ensure t
-  :bind (("C-." . embark-act)         ;; act on thing at point
-         ("C-;" . embark-dwim))       ;; smart default action
-  :init
-  ;; Show Embark actions in a helpful completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command))
-
-;; Embark-Consult integration: previews in Consult buffers
-(use-package embark-consult
-  :ensure t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
-(use-package emacs
-  :custom
-  (tab-always-indent 'complete)
-  (text-mode-ispell-word-completion nil)
-  (read-extended-command-predicate #'command-completion-default-include-p))
 
 (add-hook 'eshell-mode-hook
 	  (lambda ()
@@ -164,7 +102,6 @@
 (global-set-key (kbd "C-x p") 'my/move-back-window)
 (global-set-key (kbd "C-x 2") 'split-window-right)
 (global-set-key (kbd "C-x 3") 'split-window-below)
-(global-set-key (kbd "C-c C-c") 'copilot-chat-display)
 
 (defun my/move-back-window ()
   (interactive)
