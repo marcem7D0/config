@@ -18,6 +18,13 @@
 (use-package vterm
   :ensure t)
 
+(use-package ripgrep
+  :ensure t)
+
+(use-package helm
+  :ensure t
+  :bind ("M-x" . helm-M-x))
+
 (use-package projectile
   :ensure t
   :init
@@ -25,6 +32,11 @@
   :bind
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map)))
+
+(use-package helm-projectile
+  :ensure t
+  :config
+  (helm-projectile-on))
 
 (use-package treesit-auto
   :ensure t
