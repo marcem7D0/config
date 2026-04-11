@@ -93,7 +93,9 @@
 (use-package eglot
   :defer t
   :hook ((python-ts-mode . eglot-ensure)
-	 (rust-ts-mode . eglot-ensure)))
+	 (rust-ts-mode . eglot-ensure))
+  :bind (("C-x r" . eglot-rename)
+	 ("C-x f" . eglot-format)))
 
 (use-package corfu
   :ensure t
