@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cp ~/.config/emacs/init.el .
+cp ~/.zshrc .
 
 timestamp=$(date +%s)
 

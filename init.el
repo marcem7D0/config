@@ -39,6 +39,9 @@
 (use-package ripgrep
   :ensure t)
 
+(use-package magit
+  :ensure t)
+
 (use-package projectile
   :ensure t
   :init
@@ -113,6 +116,7 @@
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 (keymap-global-set "C-x 2" 'my-split-window-and-switch)
+(keymap-global-set "C-x 3" 'my-split-window-below-and-switch)
 (keymap-global-set "C-x p" 'my-other-window-backwards)
 (keymap-global-set "C-c t" 'my-open-vterm-split-window)
 (keymap-global-set "C-c C-k" 'comment-line)
@@ -126,6 +130,11 @@
 (defun my-split-window-and-switch ()
   (interactive)
   (split-window-right)
+  (other-window 1))
+
+(defun my-split-window-below-and-switch ()
+  (interactive)
+  (split-window-below)
   (other-window 1))
 
 (defun my-open-vterm-split-window ()
