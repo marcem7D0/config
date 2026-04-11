@@ -20,6 +20,9 @@
   :config
   (load-theme 'nordic-night t))
 
+(use-package exec-path-from-shell
+  :ensure t)
+
 (use-package all-the-icons
   :ensure t)
 
@@ -82,6 +85,11 @@
   :ensure t
   :hook(rust-mode . (lambda() (setq indent-tabs-mode nil))))
 
+(use-package pet
+  :ensure t
+  :config
+  (add-hook 'python-base-mode-hook 'pet-mode -10))
+
 (use-package yasnippet
   :ensure t
   :config
@@ -92,15 +100,16 @@
 
 (use-package eglot
   :defer t
-  :hook ((python-ts-mode . eglot-ensure)
-	 (rust-ts-mode . eglot-ensure))
+  :hook (rust-ts-mode . eglot-ensure)
   :bind (("C-x r" . eglot-rename)
 	 ("C-x f" . eglot-format)))
 
 (use-package corfu
   :ensure t
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  :custom
+  (global-corfu-minibuffer t))
 
 (use-package nerd-icons-corfu
   :ensure t
@@ -122,6 +131,7 @@
 (keymap-global-set "C-x p" 'my-other-window-backwards)
 (keymap-global-set "C-c t" 'my-open-vterm-split-window)
 (keymap-global-set "C-c C-k" 'comment-line)
+(keymap-global-set "C-x 9" 'shell-command)
 
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
