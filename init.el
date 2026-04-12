@@ -31,6 +31,11 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+(use-package telephone-line
+  :ensure t
+  :config
+  (telephone-line-mode 1))
+
 (use-package dashboard
   :ensure t
   :config
