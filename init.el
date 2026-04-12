@@ -15,10 +15,10 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(use-package nordic-night-theme
+(use-package base16-theme
   :ensure t
   :config
-  (load-theme 'nordic-night t))
+  (load-theme 'base16-default-dark t))
 
 (use-package exec-path-from-shell
   :ensure t)
@@ -83,7 +83,11 @@
 
 (use-package rust-mode
   :ensure t
-  :hook(rust-mode . (lambda() (setq indent-tabs-mode nil))))
+  :hook(rust-mode . (lambda() (setq indent-tabs-mode nil)))
+  :custom
+  (add-to-list 'eglot-server-programs
+             '((rust-ts-mode rust-mode) .
+               ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
 
 (use-package pet
   :ensure t
