@@ -9,6 +9,7 @@
 (scroll-bar-mode -1)
 (which-key-mode 1)
 (global-display-line-numbers-mode 1)
+(global-auto-revert-mode 1)
 
 (set-frame-font "FiraCode Nerd Font 12" nil t)
 
@@ -111,7 +112,8 @@
   :defer t
   :hook (rust-ts-mode . eglot-ensure)
   :bind (("C-x r" . eglot-rename)
-	 ("C-x f" . eglot-format)))
+	 ("C-x f" . eglot-format)
+	 ("C-x a" . eglot-code-actions)))
 
 (use-package corfu
   :ensure t
