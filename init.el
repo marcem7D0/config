@@ -32,11 +32,6 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-(use-package telephone-line
-  :ensure t
-  :config
-  (telephone-line-mode 1))
-
 (use-package dashboard
   :ensure t
   :config
@@ -59,61 +54,13 @@
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map)))
 
-(use-package vertico
-  :ensure t
-  :custom
-  (vertico-count 10)
-  (vertico-resize t)
-  (vertico-cycle t)
-  :init
-  (vertico-mode))
-
-(use-package consult
-  :ensure t
-  :bind (
-	 ("C-x b" . consult-buffer)
-	 ("C-s" . consult-ripgrep)
-	 ("C-c d" . consult-flymake)
-	 ("C-c i" . consult-imenu)
-	 ("M-g g" . consult-goto-line))
-  :init
-  (advice-add #'register-preview :override #'consult-register-window)
-  (setq register-preview-delay 0.5)
-  (setq xref-show-xrefs-function #'consult-xref
-	xref-show-definitions-function #'consult-xref))
-
 (use-package treesit-auto
   :ensure t
   :config
   (global-treesit-auto-mode))
 
 (use-package rust-mode
-  :ensure t
-  :hook(rust-mode . (lambda() (setq indent-tabs-mode nil)))
-  :custom
-  (add-to-list 'eglot-server-programs
-             '((rust-ts-mode rust-mode) .
-               ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
-
-(use-package pet
-  :ensure t
-  :config
-  (add-hook 'python-base-mode-hook 'pet-mode -10))
-
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
-
-(use-package yasnippet-snippets
   :ensure t)
-
-(use-package eglot
-  :defer t
-  :hook (rust-ts-mode . eglot-ensure)
-  :bind (("C-x r" . eglot-rename)
-	 ("C-x f" . eglot-format)
-	 ("C-x a" . eglot-code-actions)))
 
 (use-package corfu
   :ensure t
