@@ -11,15 +11,11 @@
 (global-display-line-numbers-mode 1)
 (global-auto-revert-mode 1)
 
+(invert-face 'default)
 (set-frame-font "FiraCode Nerd Font 12" nil t)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
-(use-package base16-theme
-  :ensure t
-  :config
-  (load-theme 'base16-default-dark t))
 
 (use-package exec-path-from-shell
   :ensure t)
