@@ -1,6 +1,6 @@
 (setq custom-file (make-temp-file "emacs-custom"))
 (setq make-backup-files nil)
-
+t
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier nil)
 (setq ring-bell-function 'ignore)
@@ -11,7 +11,6 @@
 (global-display-line-numbers-mode 1)
 (global-auto-revert-mode 1)
 
-(invert-face 'default)
 (set-frame-font "FiraCode Nerd Font 12" nil t)
 
 (require 'package)
@@ -55,20 +54,11 @@
   :config
   (global-treesit-auto-mode))
 
-(use-package rust-mode
-  :ensure t)
-
-(use-package corfu
+(use-package dumb-jump
   :ensure t
-  :init
-  (global-corfu-mode)
   :custom
-  (global-corfu-minibuffer t))
-
-(use-package nerd-icons-corfu
-  :ensure t
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+  (dumb-jump-prefer-searcher 'rg)
+  :hook (xref-backend-functions . dumb-jump-xref-activate))
 
 (use-package emacs
   :custom
