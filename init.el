@@ -11,13 +11,18 @@ t
 (global-display-line-numbers-mode 1)
 (global-auto-revert-mode 1)
 
-(set-frame-font "FiraCode Nerd Font 12" nil t)
+(set-frame-font "JetbrainsMono Nerd Font 12" nil t)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (use-package exec-path-from-shell
   :ensure t)
+
+(use-package spacemacs-theme
+  :ensure t
+  :config
+  (load-theme 'spacemacs-dark t))
 
 (use-package all-the-icons
   :ensure t)
@@ -54,11 +59,24 @@ t
   :config
   (global-treesit-auto-mode))
 
-(use-package dumb-jump
+(use-package corfu
   :ensure t
-  :custom
-  (dumb-jump-prefer-searcher 'rg)
-  :hook (xref-backend-functions . dumb-jump-xref-activate))
+  :config
+  (global-corfu-mode 1))
+
+(use-package go-mode
+  :ensure t)
+
+(use-package go-ts-mode
+  :hook ((go-ts-mode . eglot-ensure)
+	 (go-ts-mode . (lambda()
+			 (add-hook 'before-save-hook #'gofmt nil t))))
+  :config
+  (setq tab-width 4))  
+
+(use-package eglot
+  :bind
+  (("C-x a" . eglot-code-actions)))
 
 (use-package emacs
   :custom
