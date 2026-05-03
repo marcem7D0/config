@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp ~/.config/emacs/init.el .
+cp ~/.config/nvim/init.lua .
 cp ~/.zshrc .
 
 timestamp=$(date +%s)

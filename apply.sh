@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if [ -d "~/.emacs.d" ]; then
-    rm -rf ~/.emacs.d
-fi
+mkdir -p ~/.config/nvim
 
-mkdir -p ~/.config/emacs
-
-cp ./init.el ~/.config/emacs/init.el
+cp ./init.lua ~/.config/nvim/init.lua
 cp ./.zshrc ~/.zshrc
