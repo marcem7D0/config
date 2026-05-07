@@ -19,10 +19,10 @@
 (use-package exec-path-from-shell
   :ensure t)
 
-(use-package spacemacs-theme
+(use-package base16-theme
   :ensure t
   :config
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'base16-tomorrow-night t))
 
 (use-package all-the-icons
   :ensure t)
@@ -63,6 +63,26 @@
   :ensure t
   :config
   (global-corfu-mode 1))
+
+(use-package protobuf-mode
+  :ensure t)
+
+(use-package tsx-ts-mode
+  :mode ("\\.tsx\\'")
+  :hook ((typescript-ts-mode . eglot-ensure)
+		 (tsx-ts-mode . eglot-ensure))
+  :config
+  (setq tab-width 4))  
+
+(use-package web-mode
+  :ensure t)
+
+(use-package prettier
+  :ensure t
+  :hook ((typescript-ts-mode . prettier-mode)
+	 (tsx-ts-mode . prettier-mode)
+	 (js-mode . prettier-mode)
+	 (js-ts-mode . prettier-mode)))
 
 (use-package go-mode
   :ensure t)
@@ -113,5 +133,8 @@
 
 (defun my-open-vterm-split-window ()
   (interactive)
-  (my-split-window-and-switch)
+  (if (= (length (window-list)) 1)
+      (my-split-window-and-switch)
+    (select-window
+     (window-at (- (frame-width) 2) 0)))
   (vterm))
