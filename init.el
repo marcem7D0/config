@@ -22,7 +22,7 @@
 (use-package zenburn-theme
   :ensure t
   :config
-  (load-theme 'zenburn))
+  (load-theme 'zenburn :no-confirm))
 
 (use-package all-the-icons
   :ensure t)
@@ -101,7 +101,10 @@
 	 (go-ts-mode . (lambda()
 			 (add-hook 'before-save-hook #'gofmt nil t))))
   :config
-  (setq tab-width 4))  
+  (setq tab-width 4))
+
+(use-package sql-mode
+  :hook (sql-mode . eglot-ensure))
 
 (use-package eglot
   :bind
@@ -149,3 +152,4 @@
     (select-window
      (window-at (- (frame-width) 2) 0)))
   (vterm))
+
