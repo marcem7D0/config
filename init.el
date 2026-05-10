@@ -19,10 +19,10 @@
 (use-package exec-path-from-shell
   :ensure t)
 
-(use-package base16-theme
+(use-package zenburn-theme
   :ensure t
   :config
-  (load-theme 'base16-tomorrow-night t))
+  (load-theme 'zenburn))
 
 (use-package all-the-icons
   :ensure t)
@@ -67,6 +67,15 @@
 (use-package protobuf-mode
   :ensure t)
 
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
+
+(use-package yaml-ts-mode
+  :hook (yaml-ts-mode . (lambda ()
+                          (setq indent-tabs-mode nil)
+                          (setq tab-width 2))))
+
 (use-package tsx-ts-mode
   :mode ("\\.tsx\\'")
   :hook ((typescript-ts-mode . eglot-ensure)
@@ -96,7 +105,8 @@
 
 (use-package eglot
   :bind
-  (("C-x a" . eglot-code-actions)))
+  (("C-x a" . eglot-code-actions)
+   ("C-x r" . eglot-rename)))
 
 (use-package emacs
   :custom
@@ -114,6 +124,7 @@
 (keymap-global-set "C-c t" 'my-open-vterm-split-window)
 (keymap-global-set "C-c C-k" 'comment-line)
 (keymap-global-set "C-x 9" 'shell-command)
+(keymap-global-set "C-c s" 'scratch-buffer)
 
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
