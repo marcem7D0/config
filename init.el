@@ -43,6 +43,15 @@
 (use-package ripgrep
   :ensure t)
 
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-c m" . mc/edit-lines)))
+
+(use-package move-text
+  :ensure t
+  :config
+  (move-text-default-bindings))
+
 (use-package magit
   :ensure t)
 
@@ -105,6 +114,9 @@
 
 (use-package sql-mode
   :hook (sql-mode . eglot-ensure))
+
+(use-package dockerfile-mode
+  :ensure t)
 
 (use-package eglot
   :bind
