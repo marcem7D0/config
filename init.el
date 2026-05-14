@@ -17,12 +17,17 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (use-package exec-path-from-shell
-  :ensure t)
-
-(use-package zenburn-theme
   :ensure t
   :config
-  (load-theme 'zenburn :no-confirm))
+  (exec-path-from-shell-initialize))
+
+(use-package modus-themes
+  :ensure t
+  :config
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil)
+
+  (modus-themes-load-theme 'modus-vivendi))
 
 (use-package all-the-icons
   :ensure t)
@@ -54,6 +59,11 @@
 
 (use-package magit
   :ensure t)
+
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
 
 (use-package projectile
   :ensure t
