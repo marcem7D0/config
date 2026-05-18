@@ -128,10 +128,18 @@
 (use-package dockerfile-mode
   :ensure t)
 
+(use-package zig-ts-mode
+  :ensure t
+  :hook (zig-ts-mode . eglot-ensure))
+
 (use-package eglot
   :bind
   (("C-x a" . eglot-code-actions)
-   ("C-x r" . eglot-rename)))
+   ("C-x r" . eglot-rename))
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+		 '(zig-ts-mode . ("zls")))))
 
 (use-package emacs
   :custom
